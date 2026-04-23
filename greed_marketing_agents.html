@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREED — AI Marketing Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #1C1410;
+    --caramel: #C17D3C;
+    --caramel-light: #E8A55A;
+    --sage: #6B7C5E;
+    --blush: #D4816B;
+    --ice: #EAF0F5;
+    --border: rgba(28,20,16,0.12);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--espresso);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 3px solid var(--caramel);
+  }
+  .logo-mark {
+    width: 44px; height: 44px;
+    background: var(--caramel);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 18px;
+    color: var(--espresso);
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  header p { font-size: 12px; opacity: 0.55; font-weight: 300; margin-top: 1px; }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(193,125,60,0.2);
+    border: 1px solid var(--caramel);
+    color: var(--caramel-light);
+    font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: var(--espresso);
+    padding: 0 32px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 12px 20px;
+    font-size: 13px; font-weight: 500;
+    color: rgba(245,240,232,0.45);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .tab:hover { color: rgba(245,240,232,0.75); }
+  .tab.active {
+    color: var(--cream);
+    border-bottom-color: var(--caramel);
+  }
+  .tab-icon { margin-right: 6px; font-size: 14px; }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* PANEL */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* AGENT HEADER */
+  .agent-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .agent-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .agent-icon.content { background: #FDF0E5; }
+  .agent-icon.crm { background: #E8F4EE; }
+  .agent-icon.seo { background: #E8EDF5; }
+  .agent-icon.cal { background: #F0EAF8; }
+  .agent-icon.media { background: #FFF0F0; }
+  .agent-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+  }
+  .agent-desc { font-size: 13px; color: #6B6057; margin-top: 2px; }
+
+  /* FORM GRID */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .form-grid.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.span2 { grid-column: span 2; }
+
+  label {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #7A6E66;
+    text-transform: uppercase;
+  }
+
+  input[type="text"], textarea, select {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--espresso);
+    transition: border-color 0.15s;
+    width: 100%;
+    resize: vertical;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--caramel);
+    box-shadow: 0 0 0 3px rgba(193,125,60,0.1);
+  }
+  textarea { min-height: 80px; }
+
+  /* TAGS INPUT */
+  .tags-row {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px;
+  }
+  .tag {
+    background: var(--caramel);
+    color: #fff;
+    font-size: 12px; font-weight: 500;
+    padding: 3px 10px 3px 10px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 5px;
+    cursor: default;
+  }
+  .tag-remove { cursor: pointer; opacity: 0.7; font-size: 10px; }
+  .tag-remove:hover { opacity: 1; }
+  .tags-hint { font-size: 11px; color: #9A8E86; }
+
+  /* QUICK CHIPS */
+  .quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .chip {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--espresso);
+    user-select: none;
+  }
+  .chip:hover {
+    background: var(--espresso);
+    color: var(--cream);
+    border-color: var(--espresso);
+  }
+  .chip.selected {
+    background: var(--caramel);
+    color: #fff;
+    border-color: var(--caramel);
+  }
+
+  /* GENERATE BUTTON */
+  .btn-generate {
+    width: 100%;
+    background: var(--espresso);
+    color: var(--cream);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 20px;
+  }
+  .btn-generate:hover { background: #2E261F; transform: translateY(-1px); }
+  .btn-generate:active { transform: translateY(0); }
+  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-generate .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(245,240,232,0.3);
+    border-top-color: var(--cream);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* OUTPUT AREA */
+  .output-area {
+    margin-top: 24px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+  }
+  .output-area.visible { display: block; }
+  .output-header {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .output-actions { display: flex; gap: 8px; }
+  .btn-copy {
+    background: rgba(245,240,232,0.1);
+    border: 1px solid rgba(245,240,232,0.2);
+    color: var(--cream);
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 11px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+  .btn-copy:hover { background: rgba(245,240,232,0.2); }
+
+  /* VARIANTS */
+  .variants { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .variant-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .variant-label {
+    background: var(--cream);
+    padding: 8px 14px;
+    font-size: 11px; font-weight: 500;
+    color: #7A6E66;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .variant-body {
+    padding: 14px;
+    font-size: 14px; line-height: 1.7;
+    color: var(--espresso);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .btn-copy-variant {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    color: #7A6E66;
+    padding: 3px 9px; border-radius: 5px;
+    font-size: 10px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-copy-variant:hover { background: var(--espresso); color: var(--cream); border-color: var(--espresso); }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: #9A8E86;
+    margin-bottom: 10px;
+  }
+
+  /* TONE SELECTOR */
+  .tone-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tone-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .tone-btn.active {
+    background: var(--espresso);
+    color: var(--cream);
+    border-color: var(--espresso);
+  }
+
+  /* REVIEW STARS */
+  .stars { display: flex; gap: 4px; margin-bottom: 8px; }
+  .star {
+    width: 28px; height: 28px;
+    cursor: pointer;
+    color: #D0C8C0;
+    font-size: 20px;
+    transition: color 0.1s;
+  }
+  .star.active { color: var(--caramel); }
+
+  /* LOADING STATE */
+  .loading-text {
+    padding: 32px 20px;
+    text-align: center;
+    color: #7A6E66;
+    font-size: 14px;
+  }
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.span2 { grid-column: span 1; }
+    header { padding: 16px 20px; }
+    .tabs { padding: 0 16px; overflow-x: auto; }
+    .main { padding: 24px 16px; }
+  }
+
+  /* MEDIA AGENT */
+  .upload-zone {
+    border: 2px dashed var(--caramel);
+    border-radius: var(--radius);
+    background: rgba(193,125,60,0.04);
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag { background: rgba(193,125,60,0.09); border-color: var(--caramel-light); }
+  .upload-zone input[type="file"] { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+  .upload-icon { font-size: 36px; margin-bottom: 10px; }
+  .upload-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .upload-hint { font-size: 12px; color: #9A8E86; }
+
+  .media-preview-wrap {
+    display: none;
+    margin-top: 20px;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .media-preview-wrap.visible { display: flex; flex-wrap: wrap; }
+  .media-thumb {
+    width: 160px; height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .media-info { flex: 1; min-width: 180px; }
+  .media-filename { font-weight: 500; font-size: 14px; margin-bottom: 4px; word-break: break-all; }
+  .media-meta { font-size: 12px; color: #9A8E86; }
+  .media-ai-badge {
+    display: inline-block;
+    background: #F0EAF8; color: #7C4DAA;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px;
+    margin-top: 6px;
+  }
+
+  .format-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .format-card {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+    user-select: none;
+    text-align: center;
+  }
+  .format-card:hover { border-color: var(--caramel); background: #FDF8F2; }
+  .format-card.selected { border-color: var(--caramel); background: #FDF8F2; box-shadow: 0 0 0 2px rgba(193,125,60,0.15); }
+  .format-visual {
+    margin: 0 auto 8px;
+    background: var(--caramel);
+    border-radius: 4px;
+    opacity: 0.7;
+  }
+  .format-name { font-size: 12px; font-weight: 500; }
+  .format-size { font-size: 10px; color: #9A8E86; margin-top: 2px; }
+
+  .progress-wrap { display:none; margin-top:14px; }
+  .progress-wrap.visible { display:block; }
+  .progress-bar-outer { background: rgba(28,20,16,0.08); border-radius: 6px; height: 8px; overflow:hidden; }
+  .progress-bar-inner { height: 100%; background: var(--caramel); border-radius:6px; transition: width 0.3s; width: 0%; }
+  .progress-label { font-size: 12px; color: #7A6E66; margin-top: 6px; }
+
+  .export-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .export-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--espresso); color: var(--cream);
+    border: none; border-radius: 8px;
+    padding: 9px 16px; font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+    text-decoration: none;
+  }
+  .export-btn:hover { background: #2E261F; }
+  .export-btn.secondary {
+    background: #fff; color: var(--espresso);
+    border: 1px solid var(--border);
+  }
+  .export-btn.secondary:hover { background: var(--cream); }
+
+  .send-to-content {
+    margin-top: 12px;
+    background: rgba(193,125,60,0.1);
+    border: 1px solid rgba(193,125,60,0.3);
+    color: var(--caramel);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .send-to-content:hover { background: rgba(193,125,60,0.18); }
+
+  .ai-analysis-box {
+    background: #F9F5F0;
+    border: 1px solid rgba(193,125,60,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 13px; line-height: 1.7;
+    display: none;
+  }
+  .ai-analysis-box.visible { display: block; }
+  .ai-analysis-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--caramel); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">G</div>
+  <div>
+    <h1>GREED — AI Marketing Team</h1>
+    <p>Gelateria GREED · Frascati, Piazza Roma 16</p>
+  </div>
+  <div class="header-badge">5 Agenti attivi</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('content')">
+    <span class="tab-icon">✍️</span>Content Creator
+  </div>
+  <div class="tab" onclick="switchTab('crm')">
+    <span class="tab-icon">💌</span>CRM Agent
+  </div>
+  <div class="tab" onclick="switchTab('seo')">
+    <span class="tab-icon">⭐</span>SEO & Recensioni
+  </div>
+  <div class="tab" onclick="switchTab('cal')">
+    <span class="tab-icon">📅</span>Calendario
+  </div>
+  <div class="tab" onclick="switchTab('media')">
+    <span class="tab-icon">🎨</span>Media Agent
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ===== CONTENT CREATOR ===== -->
+  <div id="panel-content" class="panel active">
+    <div class="agent-header">
+      <div class="agent-icon content">✍️</div>
+      <div>
+        <div class="agent-name">Content Creator</div>
+        <div class="agent-desc">Genera post Instagram, storie e testi per i canali GREED partendo dai gusti del giorno</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Gusti del giorno</label>
+        <div class="tags-row" id="gusti-tags"></div>
+        <input type="text" id="gusto-input" placeholder="Scrivi un gusto e premi Invio" onkeydown="addGusto(event)">
+        <span class="tags-hint">Es: Pistacchio di Bronte, Stracciatella, Limone di Amalfi</span>
+      </div>
+      <div class="form-group">
+        <label>Ingrediente speciale / storia</label>
+        <textarea id="content-ingrediente" placeholder="Es: Ricotta di pecora dei Castelli Romani, lavorata questa mattina dal Caseificio Merola di Grottaferrata"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Canale di destinazione</label>
+      <div class="quick-chips" id="canale-chips">
+        <div class="chip selected" onclick="toggleChip(this,'canale')">Instagram Post</div>
+        <div class="chip" onclick="toggleChip(this,'canale')">Instagram Storia</div>
+        <div class="chip" onclick="toggleChip(this,'canale')">WhatsApp Club Greed</div>
+        <div class="chip" onclick="toggleChip(this,'canale')">Facebook</div>
+        <div class="chip" onclick="toggleChip(this,'canale')">TikTok caption</div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Tono</label>
+      <div class="tone-row">
+        <div class="tone-btn active" onclick="setTone(this,'content')">Caldo & poetico</div>
+        <div class="tone-btn" onclick="setTone(this,'content')">Fresco & ironico</div>
+        <div class="tone-btn" onclick="setTone(this,'content')">Istituzionale</div>
+        <div class="tone-btn" onclick="setTone(this,'content')">Provocatorio</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Numero di varianti</label>
+        <select id="content-varianti">
+          <option value="1">1 variante</option>
+          <option value="2" selected>2 varianti</option>
+          <option value="3">3 varianti</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Lunghezza</label>
+        <select id="content-lunghezza">
+          <option value="breve">Breve (1-2 righe)</option>
+          <option value="medio" selected>Media (3-5 righe)</option>
+          <option value="lungo">Lungo (con hashtag e CTA)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="btn-content" onclick="generateContent()">
+      <span>Genera contenuto</span>
+    </button>
+
+    <div class="output-area" id="output-content">
+      <div class="output-header">
+        <span>Output generato</span>
+        <div class="output-actions">
+          <button class="btn-copy" onclick="copyAll('output-content')">Copia tutto</button>
+        </div>
+      </div>
+      <div class="variants" id="variants-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== CRM AGENT ===== -->
+  <div id="panel-crm" class="panel">
+    <div class="agent-header">
+      <div class="agent-icon crm">💌</div>
+      <div>
+        <div class="agent-name">CRM Agent</div>
+        <div class="agent-desc">Crea messaggi personalizzati per i livelli Club Greed: offerte, promozioni stagionali, riattivazione clienti</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Obiettivo campagna</label>
+        <select id="crm-obiettivo">
+          <option value="promozione">Promozione gusto nuovo</option>
+          <option value="riattivazione">Riattivazione clienti inattivi</option>
+          <option value="ora_furba">Ora Furba (10:00–11:00)</option>
+          <option value="evento">Evento stagionale</option>
+          <option value="compleanno">Auguri compleanno</option>
+          <option value="loyalty">Upgrade loyalty</option>
+          <option value="custom">Personalizzato</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Livello destinatari</label>
+        <div class="quick-chips" style="margin-top:4px" id="loyalty-chips">
+          <div class="chip selected" onclick="toggleChip(this,'loyalty')">Tutti</div>
+          <div class="chip" onclick="toggleChip(this,'loyalty')">Esploratore 2×</div>
+          <div class="chip" onclick="toggleChip(this,'loyalty')">Ambasciatore 3×</div>
+          <div class="chip" onclick="toggleChip(this,'loyalty')">Custode 4×</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Dettagli campagna</label>
+      <textarea id="crm-dettagli" placeholder="Es: Nuovo gusto al Fico del Frantoio Corsetti, disponibile solo sabato e domenica. Sconto 15% per i Custodi con codice FICO15"></textarea>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Canale</label>
+        <select id="crm-canale">
+          <option value="whatsapp">WhatsApp (max 800 car.)</option>
+          <option value="email">Email</option>
+          <option value="push">Push notification</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tono</label>
+        <div class="tone-row" style="margin-top:4px">
+          <div class="tone-btn active" onclick="setTone(this,'crm')">Caldo</div>
+          <div class="tone-btn" onclick="setTone(this,'crm')">Urgente</div>
+          <div class="tone-btn" onclick="setTone(this,'crm')">Esclusivo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:0">
+      <label>Variabili dinamiche da includere</label>
+      <div class="quick-chips" id="vars-chips">
+        <div class="chip selected" onclick="toggleChip(this,'vars')">{{nome}}</div>
+        <div class="chip" onclick="toggleChip(this,'vars')">{{punti}}</div>
+        <div class="chip" onclick="toggleChip(this,'vars')">{{livello}}</div>
+        <div class="chip" onclick="toggleChip(this,'vars')">{{sconto}}</div>
+        <div class="chip" onclick="toggleChip(this,'vars')">{{codice}}</div>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="btn-crm" onclick="generateCRM()">
+      <span>Genera messaggio campagna</span>
+    </button>
+
+    <div class="output-area" id="output-crm">
+      <div class="output-header">
+        <span>Output generato</span>
+        <div class="output-actions">
+          <button class="btn-copy" onclick="copyAll('output-crm')">Copia tutto</button>
+        </div>
+      </div>
+      <div class="variants" id="variants-crm"></div>
+    </div>
+  </div>
+
+  <!-- ===== SEO & RECENSIONI ===== -->
+  <div id="panel-seo" class="panel">
+    <div class="agent-header">
+      <div class="agent-icon seo">⭐</div>
+      <div>
+        <div class="agent-name">SEO & Recensioni</div>
+        <div class="agent-desc">Genera risposte professionali alle recensioni Google/TripAdvisor, ottimizzate per il posizionamento locale</div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Valutazione del cliente</label>
+      <div class="stars" id="stars-row">
+        <span class="star active" onclick="setStar(1)">★</span>
+        <span class="star active" onclick="setStar(2)">★</span>
+        <span class="star active" onclick="setStar(3)">★</span>
+        <span class="star active" onclick="setStar(4)">★</span>
+        <span class="star active" onclick="setStar(5)">★</span>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Testo recensione</label>
+      <textarea id="seo-recensione" rows="4" placeholder="Incolla qui il testo della recensione ricevuta..."></textarea>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Piattaforma</label>
+        <select id="seo-piattaforma">
+          <option value="google">Google Maps</option>
+          <option value="tripadvisor">TripAdvisor</option>
+          <option value="facebook">Facebook</option>
+          <option value="thefork">TheFork</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Nome del cliente (se disponibile)</label>
+        <input type="text" id="seo-nome" placeholder="Es: Marco, Laura, Mr. Smith...">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Keyword SEO da includere naturalmente</label>
+      <div class="quick-chips" id="kw-chips">
+        <div class="chip selected" onclick="toggleChip(this,'kw')">gelateria Frascati</div>
+        <div class="chip selected" onclick="toggleChip(this,'kw')">senza glutine</div>
+        <div class="chip" onclick="toggleChip(this,'kw')">Castelli Romani</div>
+        <div class="chip" onclick="toggleChip(this,'kw')">gelato artigianale</div>
+        <div class="chip" onclick="toggleChip(this,'kw')">Gambero Rosso</div>
+        <div class="chip" onclick="toggleChip(this,'kw')">km-0</div>
+        <div class="chip" onclick="toggleChip(this,'kw')">vegano</div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:0">
+      <label>Tipo di risposta</label>
+      <div class="tone-row">
+        <div class="tone-btn active" onclick="setTone(this,'seo')">Calorosa</div>
+        <div class="tone-btn" onclick="setTone(this,'seo')">Professionale</div>
+        <div class="tone-btn" onclick="setTone(this,'seo')">Difensiva (negativa)</div>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="btn-seo" onclick="generateSEO()">
+      <span>Genera risposta</span>
+    </button>
+
+    <div class="output-area" id="output-seo">
+      <div class="output-header">
+        <span>Output generato</span>
+        <div class="output-actions">
+          <button class="btn-copy" onclick="copyAll('output-seo')">Copia tutto</button>
+        </div>
+      </div>
+      <div class="variants" id="variants-seo"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+  <!-- ===== CALENDARIO EDITORIALE ===== -->
+  <div id="panel-cal" class="panel">
+    <div class="agent-header">
+      <div class="agent-icon cal">📅</div>
+      <div>
+        <div class="agent-name">Calendario Editoriale</div>
+        <div class="agent-desc">Genera il piano editoriale settimanale o mensile con post, storie e campagne già distribuiti sui canali</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Periodo</label>
+        <select id="cal-periodo">
+          <option value="settimana">Prossima settimana</option>
+          <option value="2settimane">Prossime 2 settimane</option>
+          <option value="mese">Prossimo mese</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Stagione / Evento in arrivo</label>
+        <input type="text" id="cal-evento" placeholder="Es: Pasqua, Estate, Sagra dell'uva, Ferragosto...">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Gusti / prodotti da promuovere</label>
+      <textarea id="cal-gusti" placeholder="Es: Nuovo gusto al Fico dei Castelli, ritorno del Tiramisù artigianale, gelato al Cesanese..."></textarea>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Canali attivi</label>
+      <div class="quick-chips" id="cal-canali-chips">
+        <div class="chip selected" onclick="toggleChip(this,'cal-canali')">Instagram</div>
+        <div class="chip selected" onclick="toggleChip(this,'cal-canali')">WhatsApp Club</div>
+        <div class="chip" onclick="toggleChip(this,'cal-canali')">Facebook</div>
+        <div class="chip" onclick="toggleChip(this,'cal-canali')">TikTok</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Frequenza post</label>
+        <select id="cal-frequenza">
+          <option value="1">1 post/giorno</option>
+          <option value="2" selected>2 post/giorno</option>
+          <option value="3">3 post/giorno</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Formato output</label>
+        <select id="cal-formato">
+          <option value="tabella">Tabella giorno/canale/tipo</option>
+          <option value="lista">Lista cronologica con testi</option>
+          <option value="brief">Brief completo con hook e CTA</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="btn-cal" onclick="generateCal()">
+      <span>Genera calendario</span>
+    </button>
+
+    <div class="output-area" id="output-cal">
+      <div class="output-header">
+        <span>Calendario generato</span>
+        <div class="output-actions">
+          <button class="btn-copy" onclick="copyAll('output-cal')">Copia tutto</button>
+        </div>
+      </div>
+      <div class="variants" id="variants-cal"></div>
+    </div>
+  </div>
+
+  <!-- ===== MEDIA AGENT ===== -->
+  <div id="panel-media" class="panel">
+    <div class="agent-header">
+      <div class="agent-icon media">🎨</div>
+      <div>
+        <div class="agent-name">Media Agent</div>
+        <div class="agent-desc">Carica foto o video → analisi AI → resize per ogni social → caption pronta → tutto in un click</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: UPLOAD -->
+    <div class="section-title">1 — Carica il file</div>
+    <div class="upload-zone" id="upload-zone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+      <input type="file" id="media-file" accept="image/*,video/*" onchange="onFileSelect(event)">
+      <div class="upload-icon">📂</div>
+      <div class="upload-title">Trascina qui la foto o il video</div>
+      <div class="upload-hint">JPG, PNG, WEBP, MP4, MOV · Max 50MB</div>
+    </div>
+
+    <div class="media-preview-wrap" id="media-preview">
+      <img id="media-thumb" class="media-thumb" src="" alt="preview" style="display:none">
+      <video id="media-thumb-video" class="media-thumb" style="display:none" muted playsinline></video>
+      <div class="media-info">
+        <div class="media-filename" id="media-fname">—</div>
+        <div class="media-meta" id="media-meta">—</div>
+        <div class="media-ai-badge" id="media-ai-badge" style="display:none">✦ Analisi AI in corso...</div>
+      </div>
+    </div>
+
+    <div class="ai-analysis-box" id="ai-analysis-box">
+      <div class="ai-analysis-label">✦ Analisi AI del contenuto</div>
+      <div id="ai-analysis-text"></div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- STEP 2: FORMATI -->
+    <div class="section-title">2 — Seleziona i formati di esportazione</div>
+    <div class="format-grid" id="format-grid">
+      <div class="format-card selected" onclick="toggleFormat(this)" data-w="1080" data-h="1080" data-name="Instagram Post" data-ratio="1:1">
+        <div class="format-visual" style="width:40px;height:40px;"></div>
+        <div class="format-name">Instagram Post</div>
+        <div class="format-size">1080 × 1080</div>
+      </div>
+      <div class="format-card selected" onclick="toggleFormat(this)" data-w="1080" data-h="1920" data-name="Story / Reel" data-ratio="9:16">
+        <div class="format-visual" style="width:22px;height:40px;"></div>
+        <div class="format-name">Story / Reel</div>
+        <div class="format-size">1080 × 1920</div>
+      </div>
+      <div class="format-card" onclick="toggleFormat(this)" data-w="1080" data-h="1350" data-name="Instagram Portrait" data-ratio="4:5">
+        <div class="format-visual" style="width:32px;height:40px;"></div>
+        <div class="format-name">Portrait</div>
+        <div class="format-size">1080 × 1350</div>
+      </div>
+      <div class="format-card" onclick="toggleFormat(this)" data-w="1200" data-h="630" data-name="Facebook / OG" data-ratio="16:9">
+        <div class="format-visual" style="width:40px;height:21px;"></div>
+        <div class="format-name">Facebook / OG</div>
+        <div class="format-size">1200 × 630</div>
+      </div>
+      <div class="format-card" onclick="toggleFormat(this)" data-w="1080" data-h="1080" data-name="WhatsApp" data-ratio="1:1">
+        <div class="format-visual" style="width:40px;height:40px;background:#25D366;opacity:0.6;"></div>
+        <div class="format-name">WhatsApp</div>
+        <div class="format-size">1080 × 1080</div>
+      </div>
+      <div class="format-card" onclick="toggleFormat(this)" data-w="1280" data-h="720" data-name="TikTok Cover" data-ratio="16:9">
+        <div class="format-visual" style="width:40px;height:23px;background:#010101;opacity:0.5;"></div>
+        <div class="format-name">TikTok Cover</div>
+        <div class="format-size">1280 × 720</div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px">
+      <label>Watermark / testo da sovrapporre</label>
+      <div class="quick-chips" id="wm-chips">
+        <div class="chip selected" onclick="toggleChip(this,'wm')">Logo GREED</div>
+        <div class="chip" onclick="toggleChip(this,'wm')">Senza glutine 🌾</div>
+        <div class="chip" onclick="toggleChip(this,'wm')">Frascati · Piazza Roma</div>
+        <div class="chip" onclick="toggleChip(this,'wm')">Gambero Rosso 🦞</div>
+        <div class="chip" onclick="toggleChip(this,'wm')">Nessuno</div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- STEP 3: ELABORA -->
+    <div class="section-title">3 — Elabora e scarica</div>
+
+    <button class="btn-generate" id="btn-media" onclick="processMedia()" disabled>
+      <span>Elabora e genera formati</span>
+    </button>
+
+    <div class="progress-wrap" id="media-progress">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+      <div class="progress-label" id="progress-label">Preparazione...</div>
+    </div>
+
+    <div class="export-grid" id="export-grid"></div>
+
+    <button class="send-to-content" id="send-to-content-btn" style="display:none" onclick="sendToContentCreator()">
+      ✍️ Invia descrizione al Content Creator → genera caption automaticamente
+    </button>
+
+  </div>
+
+</div><!-- /main -->
+
+<!-- API KEY BANNER -->
+<div id="api-key-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--espresso);color:var(--cream);padding:14px 24px;align-items:center;gap:12px;z-index:999;border-top:3px solid var(--caramel);">
+  <span style="font-size:13px;flex-shrink:0">🔑 Inserisci la tua API key Anthropic:</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="flex:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 12px;color:var(--cream);font-size:13px;font-family:'DM Sans',sans-serif;">
+  <button onclick="submitApiKey()" style="background:var(--caramel);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Salva</button>
+  <span style="font-size:11px;opacity:0.5;flex-shrink:0">Salvata solo nel tuo browser</span>
+</div>
+
+<script>
+// Chiamata all'avvio
+window.addEventListener('load', checkApiKey);
+// ===== STATE =====
+const state = {
+  content: { tone: 'Caldo & poetico', canale: 'Instagram Post' },
+  crm: { tone: 'Caldo', loyalty: 'Tutti', vars: ['{{nome}}'] },
+  seo: { tone: 'Calorosa', stars: 5, kw: ['gelateria Frascati','senza glutine'] },
+  cal: { canali: ['Instagram','WhatsApp Club'] },
+  media: { wm: ['Logo GREED'], formats: [] }
+};
+
+// ===== API KEY MANAGEMENT =====
+function getApiKey() {
+  return localStorage.getItem('greed_api_key') || '';
+}
+function saveApiKey(key) {
+  localStorage.setItem('greed_api_key', key.trim());
+}
+function checkApiKey() {
+  if (!getApiKey()) {
+    document.getElementById('api-key-banner').style.display = 'flex';
+  } else {
+    document.getElementById('api-key-banner').style.display = 'none';
+  }
+}
+function submitApiKey() {
+  const val = document.getElementById('api-key-input').value.trim();
+  if (!val.startsWith('sk-ant-')) { alert('Chiave non valida — deve iniziare con sk-ant-'); return; }
+  saveApiKey(val);
+  checkApiKey();
+}
+
+const TABS = ['content','crm','seo','cal','media'];
+const GUSTI = [];
+
+// ===== TABS =====
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab')[TABS.indexOf(name)].classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// ===== GUSTI TAGS =====
+function addGusto(e) {
+  if (e.key !== 'Enter') return;
+  const val = e.target.value.trim();
+  if (!val) return;
+  GUSTI.push(val);
+  renderGusti();
+  e.target.value = '';
+}
+function removeGusto(i) {
+  GUSTI.splice(i, 1);
+  renderGusti();
+}
+function renderGusti() {
+  const row = document.getElementById('gusti-tags');
+  row.innerHTML = GUSTI.map((g, i) =>
+    `<span class="tag">${g}<span class="tag-remove" onclick="removeGusto(${i})">✕</span></span>`
+  ).join('');
+}
+
+// ===== CHIPS =====
+function toggleChip(el, group) {
+  const single = ['canale','loyalty'].includes(group);
+  if (single) {
+    el.closest('[id$="-chips"], .quick-chips').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'canale') state.content.canale = el.textContent;
+    if (group === 'loyalty') state.crm.loyalty = el.textContent;
+  } else {
+    el.classList.toggle('selected');
+    if (group === 'vars') state.crm.vars = [...document.querySelectorAll('#vars-chips .chip.selected')].map(c => c.textContent);
+    if (group === 'kw') state.seo.kw = [...document.querySelectorAll('#kw-chips .chip.selected')].map(c => c.textContent);
+    if (group === 'cal-canali') state.cal.canali = [...document.querySelectorAll('#cal-canali-chips .chip.selected')].map(c => c.textContent);
+    if (group === 'wm') state.media.wm = [...document.querySelectorAll('#wm-chips .chip.selected')].map(c => c.textContent);
+  }
+}
+
+// ===== TONES =====
+function setTone(el, agent) {
+  el.closest('.tone-row').querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state[agent].tone = el.textContent;
+}
+
+// ===== STARS =====
+let currentStars = 5;
+function setStar(n) {
+  currentStars = n;
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+}
+
+// ===== COPY =====
+function copyAll(outputId) {
+  const texts = [...document.querySelectorAll(`#${outputId} .variant-body`)].map(e => e.textContent).join('\n\n---\n\n');
+  navigator.clipboard.writeText(texts).catch(() => {});
+}
+function copyVariant(btn) {
+  const text = btn.closest('.variant-card').querySelector('.variant-body').textContent;
+  navigator.clipboard.writeText(text).catch(() => {});
+  btn.textContent = 'Copiato ✓';
+  setTimeout(() => { btn.textContent = 'Copia'; }, 2000);
+}
+
+// ===== LOADING =====
+function setLoading(btnId, outputId, loading) {
+  const btn = document.getElementById(btnId);
+  const out = document.getElementById(outputId);
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div><span>Generando...</span>';
+    out.classList.add('visible');
+    document.getElementById(outputId.replace('output','variants')).innerHTML =
+      '<div class="loading-text"><span class="loading-dots">Sto scrivendo per GREED</span></div>';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '<span>' + btn.dataset.label + '</span>';
+  }
+}
+
+// ===== RENDER VARIANTS =====
+function renderVariants(containerId, variants) {
+  const labels = ['Variante A','Variante B','Variante C'];
+  document.getElementById(containerId).innerHTML = variants.map((v, i) => `
+    <div class="variant-card">
+      <div class="variant-label">
+        <span>${variants.length > 1 ? labels[i] : 'Risultato'}</span>
+        <button class="btn-copy-variant" onclick="copyVariant(this)">Copia</button>
+      </div>
+      <div class="variant-body">${escHtml(v)}</div>
+    </div>
+  `).join('');
+}
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ===== CLAUDE API =====
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 1000,
+      system: `Sei il copywriter ufficiale di Gelateria GREED a Frascati (Piazza Roma 16).
+GREED è una gelateria artigianale 100% senza glutine, premiata da Gambero Rosso come Miglior Gelato Gastronomico.
+Usa ingredienti km-0 dei Castelli Romani. Offre opzioni vegane e senza lattosio.
+Il tono del brand è autentico, locale, mai pomposo. Scrivi sempre in italiano impeccabile.
+Rispondi SOLO con il testo richiesto, senza introduzioni, senza spiegazioni, senza virgolette contenenti tutto il testo.`,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || 'Errore API');
+  return data.content[0].text.trim();
+}
+
+// ===== GENERATE CONTENT =====
+document.getElementById('btn-content').dataset.label = 'Genera contenuto';
+async function generateContent() {
+  const gusti = GUSTI.length ? GUSTI.join(', ') : 'gusti del giorno';
+  const ingrediente = document.getElementById('content-ingrediente').value;
+  const canale = state.content.canale;
+  const tono = state.content.tone;
+  const nVar = parseInt(document.getElementById('content-varianti').value);
+  const lunghezza = document.getElementById('content-lunghezza').value;
+  const lunghMap = { breve: '1-2 righe, massimo 100 caratteri', medio: '3-5 righe con emoji', lungo: '5-8 righe con hashtag e call to action' };
+
+  setLoading('btn-content','output-content', true);
+  try {
+    const prompt = `Scrivi ${nVar} ${nVar>1?'varianti di caption':'caption'} per ${canale} di Gelateria GREED.
+
+Gusti del giorno: ${gusti}
+${ingrediente ? 'Ingrediente / storia da valorizzare: ' + ingrediente : ''}
+Tono: ${tono}
+Lunghezza: ${lunghMap[lunghezza]}
+
+${nVar > 1 ? `Separa le varianti con il separatore esatto: |||` : ''}
+Includi emoji appropriate al brand artigianale e goloso.
+Non scrivere titoli o numerazioni, solo il testo dei post.`;
+
+    const raw = await callClaude(prompt);
+    const variants = nVar > 1 ? raw.split('|||').map(s => s.trim()).filter(Boolean) : [raw];
+    renderVariants('variants-content', variants.slice(0, nVar));
+  } catch(e) {
+    document.getElementById('variants-content').innerHTML =
+      `<div class="loading-text" style="color:#c0392b">Errore: ${e.message}</div>`;
+  }
+  setLoading('btn-content','output-content', false);
+}
+
+// ===== GENERATE CRM =====
+document.getElementById('btn-crm').dataset.label = 'Genera messaggio campagna';
+async function generateCRM() {
+  const obiettivo = document.getElementById('crm-obiettivo').selectedOptions[0].text;
+  const loyalty = state.crm.loyalty;
+  const dettagli = document.getElementById('crm-dettagli').value;
+  const canale = document.getElementById('crm-canale').selectedOptions[0].text;
+  const tono = state.crm.tone;
+  const vars = state.crm.vars;
+
+  setLoading('btn-crm','output-crm', true);
+  try {
+    const prompt = `Scrivi UN messaggio di marketing per Gelateria GREED.
+
+Obiettivo: ${obiettivo}
+Destinatari: ${loyalty} del Club Greed
+Canale: ${canale}
+Tono: ${tono}
+${dettagli ? 'Dettagli: ' + dettagli : ''}
+${vars.length ? 'Includi queste variabili dinamiche dove appropriato: ' + vars.join(', ') : ''}
+
+Regole:
+- Se WhatsApp: massimo 800 caratteri, usa emoji con parsimonia
+- Inizia sempre con una frase che cattura l'attenzione
+- Termina con una CTA chiara
+- Non menzionare prezzi se non forniti
+- Firma come "Team GREED 🍦"`;
+
+    const raw = await callClaude(prompt);
+    renderVariants('variants-crm', [raw]);
+  } catch(e) {
+    document.getElementById('variants-crm').innerHTML =
+      `<div class="loading-text" style="color:#c0392b">Errore: ${e.message}</div>`;
+  }
+  setLoading('btn-crm','output-crm', false);
+}
+
+// ===== GENERATE SEO =====
+document.getElementById('btn-seo').dataset.label = 'Genera risposta';
+async function generateSEO() {
+  const recensione = document.getElementById('seo-recensione').value;
+  if (!recensione.trim()) { alert('Inserisci il testo della recensione'); return; }
+  const stelle = currentStars;
+  const piattaforma = document.getElementById('seo-piattaforma').selectedOptions[0].text;
+  const nome = document.getElementById('seo-nome').value.trim();
+  const kw = state.seo.kw;
+  const tono = state.seo.tone;
+  setLoading('btn-seo','output-seo', true);
+  try {
+    const isNeg = stelle <= 2;
+    const prompt = `Scrivi la risposta del titolare di Gelateria GREED a questa recensione ${piattaforma} da ${stelle} stelle.
+
+${nome ? 'Nome cliente: ' + nome : 'Cliente anonimo'}
+Recensione: "${recensione}"
+Tono: ${tono}
+${kw.length ? 'Inserisci naturalmente queste keyword SEO: ' + kw.join(', ') : ''}
+
+Regole:
+- Massimo 200 parole
+- ${isNeg ? 'Rispondi con professionalità, non essere difensivo, offri soluzione concreta' : 'Ringrazia sinceramente, valorizza l\'elemento specifico citato'}
+- Firma come "Dario — Gelateria GREED"
+- Non iniziare mai con "Grazie per la tua recensione"
+- Includi un invito a tornare${isNeg ? ' dopo aver risolto il problema' : ''}
+- Scrivi solo la risposta, nessun commento aggiuntivo`;
+    const raw = await callClaude(prompt);
+    renderVariants('variants-seo', [raw]);
+  } catch(e) {
+    document.getElementById('variants-seo').innerHTML = `<div class="loading-text" style="color:#c0392b">Errore: ${e.message}</div>`;
+  }
+  setLoading('btn-seo','output-seo', false);
+}
+
+// ===== GENERATE CALENDARIO =====
+document.getElementById('btn-cal').dataset.label = 'Genera calendario';
+async function generateCal() {
+  const periodo = document.getElementById('cal-periodo').selectedOptions[0].text;
+  const evento = document.getElementById('cal-evento').value;
+  const gusti = document.getElementById('cal-gusti').value;
+  const canali = state.cal.canali;
+  const freq = document.getElementById('cal-frequenza').selectedOptions[0].text;
+  const formato = document.getElementById('cal-formato').selectedOptions[0].text;
+  setLoading('btn-cal','output-cal', true);
+  try {
+    const prompt = `Crea il calendario editoriale per Gelateria GREED per: ${periodo}.
+
+Canali attivi: ${canali.join(', ')}
+Frequenza: ${freq}
+${evento ? 'Evento/stagione in arrivo: ' + evento : ''}
+${gusti ? 'Prodotti da promuovere: ' + gusti : ''}
+Formato richiesto: ${formato}
+
+Regole:
+- Usa il brand GREED: gelateria artigianale, senza glutine, Castelli Romani, km-0, Gambero Rosso
+- Distribuisci equilibrio tra: storytelling prodotto, educativo (km-0, senza glutine), coinvolgimento (domande, poll), promozioni
+- Per ogni voce indica: giorno, ora consigliata, canale, tipo di contenuto (foto/video/storia/reel), hook di apertura
+- Tono: autentico, non istituzionale
+- Includi almeno 1 campagna WhatsApp Club Greed a settimana`;
+    const raw = await callClaude(prompt);
+    renderVariants('variants-cal', [raw]);
+  } catch(e) {
+    document.getElementById('variants-cal').innerHTML = `<div class="loading-text" style="color:#c0392b">Errore: ${e.message}</div>`;
+  }
+  setLoading('btn-cal','output-cal', false);
+}
+
+// ===== MEDIA AGENT =====
+let mediaFile = null;
+let mediaAnalysis = '';
+let canvasOutputs = [];
+const FORMATS = [];
+
+// Init format selection
+document.querySelectorAll('.format-card').forEach(c => {
+  if (c.classList.contains('selected')) {
+    FORMATS.push({ w: +c.dataset.w, h: +c.dataset.h, name: c.dataset.name });
+  }
+});
+
+function toggleFormat(el) {
+  el.classList.toggle('selected');
+  const idx = FORMATS.findIndex(f => f.name === el.dataset.name);
+  if (el.classList.contains('selected')) {
+    if (idx === -1) FORMATS.push({ w: +el.dataset.w, h: +el.dataset.h, name: el.dataset.name });
+  } else {
+    if (idx > -1) FORMATS.splice(idx, 1);
+  }
+}
+
+function onDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
+function onDragLeave() { document.getElementById('upload-zone').classList.remove('drag'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+}
+function onFileSelect(e) { if (e.target.files[0]) handleFile(e.target.files[0]); }
+
+async function handleFile(file) {
+  mediaFile = file;
+  const isVideo = file.type.startsWith('video/');
+  const isImage = file.type.startsWith('image/');
+  if (!isVideo && !isImage) { alert('Formato non supportato'); return; }
+
+  document.getElementById('media-fname').textContent = file.name;
+  document.getElementById('media-meta').textContent =
+    (file.type.split('/')[1].toUpperCase()) + ' · ' + (file.size / 1024 / 1024).toFixed(1) + ' MB';
+
+  const thumb = document.getElementById('media-thumb');
+  const thumbV = document.getElementById('media-thumb-video');
+  const wrap = document.getElementById('media-preview');
+  wrap.classList.add('visible');
+
+  if (isImage) {
+    thumb.style.display = 'block'; thumbV.style.display = 'none';
+    thumb.src = URL.createObjectURL(file);
+    // AI Vision analysis
+    analyzeImageWithAI(file);
+  } else {
+    thumb.style.display = 'none'; thumbV.style.display = 'block';
+    thumbV.src = URL.createObjectURL(file);
+    thumbV.load();
+    // For video: just generate caption brief
+    mediaAnalysis = `Video: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`;
+    document.getElementById('ai-analysis-text').textContent =
+      'Video caricato. Seleziona i formati e genera — per i video verrà creata la scheda formati con specifiche tecniche per ogni piattaforma.';
+    document.getElementById('ai-analysis-box').classList.add('visible');
+  }
+  document.getElementById('btn-media').disabled = false;
+}
+
+async function analyzeImageWithAI(file) {
+  const badge = document.getElementById('media-ai-badge');
+  badge.style.display = 'inline-block';
+  badge.textContent = '✦ Analisi AI in corso...';
+  try {
+    const b64 = await fileToBase64(file);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 400,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: file.type, data: b64 } },
+            { type: 'text', text: `Sei il social media manager di Gelateria GREED (Frascati, gelateria artigianale senza glutine, Gambero Rosso).
+Analizza questa immagine in 3 righe max:
+1. Cosa mostra (gusto, prodotto, ambiente, persone)
+2. Punto di forza visivo per i social
+3. Suggerimento di hashtag (5-6 pertinenti)
+Rispondi in italiano, conciso.` }
+          ]
+        }]
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      mediaAnalysis = data.content[0].text.trim();
+      document.getElementById('ai-analysis-text').textContent = mediaAnalysis;
+      document.getElementById('ai-analysis-box').classList.add('visible');
+      badge.textContent = '✦ Analisi AI completata';
+    } else {
+      badge.textContent = '✦ Analisi non disponibile';
+    }
+  } catch(e) {
+    badge.textContent = '✦ Analisi non disponibile';
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function processMedia() {
+  if (!mediaFile) return;
+  const isVideo = mediaFile.type.startsWith('video/');
+  const selectedFormats = [...document.querySelectorAll('.format-card.selected')].map(c => ({
+    w: +c.dataset.w, h: +c.dataset.h, name: c.dataset.name
+  }));
+  if (!selectedFormats.length) { alert('Seleziona almeno un formato'); return; }
+
+  const btn = document.getElementById('btn-media');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Elaborazione in corso...</span>';
+  const prog = document.getElementById('media-progress');
+  const bar = document.getElementById('progress-bar');
+  const lbl = document.getElementById('progress-label');
+  prog.classList.add('visible');
+  document.getElementById('export-grid').innerHTML = '';
+
+  const wm = state.media.wm.filter(w => w !== 'Nessuno');
+
+  if (isVideo) {
+    // For video: generate spec sheet only (FFmpeg too heavy for inline HTML)
+    await generateVideoSpecSheet(selectedFormats, wm);
+  } else {
+    await processImage(selectedFormats, wm, bar, lbl);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>Elabora e genera formati</span>';
+  document.getElementById('send-to-content-btn').style.display = 'block';
+}
+
+async function processImage(formats, wm, bar, lbl) {
+  canvasOutputs = [];
+  for (let i = 0; i < formats.length; i++) {
+    const fmt = formats[i];
+    lbl.textContent = `Elaboro ${fmt.name}...`;
+    bar.style.width = Math.round(((i) / formats.length) * 100) + '%';
+    await new Promise(r => setTimeout(r, 60));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = fmt.w; canvas.height = fmt.h;
+    const ctx = canvas.getContext('2d');
+
+    // Draw image with cover crop
+    await new Promise(res => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.max(fmt.w / img.width, fmt.h / img.height);
+        const sw = img.width * scale, sh = img.height * scale;
+        const ox = (fmt.w - sw) / 2, oy = (fmt.h - sh) / 2;
+        ctx.drawImage(img, ox, oy, sw, sh);
+
+        // Watermark overlay
+        if (wm.length && !wm.includes('Nessuno')) {
+          // Gradient bar at bottom
+          const grad = ctx.createLinearGradient(0, fmt.h - 120, 0, fmt.h);
+          grad.addColorStop(0, 'rgba(0,0,0,0)');
+          grad.addColorStop(1, 'rgba(0,0,0,0.65)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, fmt.h - 120, fmt.w, 120);
+
+          // GREED text
+          ctx.fillStyle = '#FFFFFF';
+          const fSize = Math.round(fmt.w * 0.055);
+          ctx.font = `900 ${fSize}px Georgia, serif`;
+          ctx.letterSpacing = '4px';
+          ctx.textAlign = 'left';
+          ctx.fillText('GREED', fmt.w * 0.06, fmt.h - fmt.w * 0.04);
+
+          // Extra badge texts
+          const badges = wm.filter(w => w !== 'Logo GREED');
+          if (badges.length) {
+            ctx.font = `400 ${Math.round(fSize * 0.48)}px sans-serif`;
+            ctx.fillStyle = 'rgba(255,255,255,0.75)';
+            ctx.fillText(badges.join(' · '), fmt.w * 0.06, fmt.h - fmt.w * 0.012);
+          }
+        }
+        res();
+      };
+      img.src = URL.createObjectURL(mediaFile);
+    });
+
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    canvasOutputs.push({ name: fmt.name, dataUrl, w: fmt.w, h: fmt.h });
+
+    // Render download button
+    const a = document.createElement('a');
+    a.className = 'export-btn';
+    a.download = `GREED_${fmt.name.replace(/\s/g,'_')}_${fmt.w}x${fmt.h}.jpg`;
+    a.href = dataUrl;
+    a.innerHTML = `⬇ ${fmt.name} <span style="opacity:0.5;font-size:11px">${fmt.w}×${fmt.h}</span>`;
+    document.getElementById('export-grid').appendChild(a);
+  }
+
+  bar.style.width = '100%';
+  lbl.textContent = `✓ ${formats.length} formati pronti — scarica qui sotto`;
+}
+
+async function generateVideoSpecSheet(formats, wm) {
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('progress-label').textContent = 'Generazione scheda formati...';
+
+  const grid = document.getElementById('export-grid');
+  grid.innerHTML = '';
+
+  // Create a spec card for each format
+  const div = document.createElement('div');
+  div.style.cssText = 'width:100%;background:#fff;border:1px solid rgba(28,20,16,0.12);border-radius:10px;padding:16px;font-size:13px;line-height:1.8';
+  div.innerHTML = '<div style="font-weight:500;margin-bottom:10px;font-size:14px">📋 Scheda tecnica esportazione video</div>' +
+    formats.map(f => {
+      const specs = getVideoSpecs(f);
+      return `<div style="padding:8px 0;border-bottom:1px solid rgba(28,20,16,0.07)">
+        <b>${f.name}</b> — ${f.w}×${f.h}px<br>
+        <span style="color:#7A6E66">${specs}</span>
+      </div>`;
+    }).join('') +
+    `<div style="margin-top:10px;color:#9A8E86;font-size:11px">Per la compressione video usa <b>HandBrake</b> (gratuito) o carica direttamente su Instagram/TikTok che ottimizzano in automatico.</div>`;
+  grid.appendChild(div);
+}
+
+function getVideoSpecs(fmt) {
+  const specs = {
+    'Story / Reel': 'Formato: MP4 H.264 · Audio: AAC 44.1kHz · Durata: max 60s (Story), 90s (Reel) · FPS: 30',
+    'Instagram Post': 'Formato: MP4 H.264 · Durata: 3s–60s · FPS: 30 · Bitrate: 3.5Mbps',
+    'TikTok Cover': 'Formato: MP4 H.264 · Durata: 3s–60s · FPS: 30 · Audio: obbligatorio',
+    'Facebook / OG': 'Formato: MP4 H.264 · Durata: max 240 min · FPS: 30 · Bitrate: 4Mbps',
+    'Portrait': 'Formato: MP4 H.264 · Aspect ratio: 4:5 · FPS: 30',
+    'WhatsApp': 'Formato: MP4 · Max 16MB · Durata: max 3 min · FPS: 30'
+  };
+  return specs[fmt.name] || `MP4 H.264 · ${fmt.w}×${fmt.h}px · 30fps`;
+}
+
+function sendToContentCreator() {
+  const isVideo = mediaFile && mediaFile.type.startsWith('video/');
+  const tipo = isVideo ? 'video' : 'foto';
+  const fname = mediaFile ? mediaFile.name : '';
+  const analysis = mediaAnalysis || '';
+
+  // Pre-fill content creator fields
+  switchTab('content');
+  const ingrediField = document.getElementById('content-ingrediente');
+  ingrediField.value = `[Da ${tipo}: ${fname}]\n${analysis}`;
+  ingrediField.style.borderColor = 'var(--caramel)';
+  setTimeout(() => { ingrediField.style.borderColor = ''; }, 2000);
+
+  // Scroll to top of content panel
+  document.getElementById('panel-content').scrollIntoView({ behavior: 'smooth' });
+}
+
+</script>
+</body>
+</html>

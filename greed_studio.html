@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREED Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F5F0E8;--esp:#1C1410;--car:#C17D3C;--cl:#E8A55A;--bd:rgba(28,20,16,0.12);--ok:#6B7C5E;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--esp);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;min-height:100vh;-webkit-tap-highlight-color:transparent;}
+header{background:var(--esp);color:var(--cream);padding:18px 22px;display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--car);position:sticky;top:0;z-index:50;}
+.logo{width:42px;height:42px;background:var(--car);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:18px;color:var(--esp);flex-shrink:0;}
+header h1{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;}
+header p{font-size:11px;opacity:.55;margin-top:1px;}
+.tools-btn{margin-left:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--cream);font-size:12px;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.tools-btn:hover{background:rgba(255,255,255,.18);}
+.wrap{max-width:600px;margin:0 auto;padding:24px 18px 120px;}
+
+/* STUDIO — main flow */
+.step{margin-bottom:20px;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--car);color:#fff;border-radius:50%;font-size:13px;font-weight:600;margin-right:8px;}
+.step-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;}
+
+.drop{border:2px dashed var(--car);border-radius:18px;background:rgba(193,125,60,.05);padding:44px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.drop:hover{background:rgba(193,125,60,.1);}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.drop-ico{font-size:42px;margin-bottom:12px;}
+.drop-t{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
+.drop-s{font-size:13px;color:#9A8E86;}
+
+.preview{display:none;border-radius:18px;overflow:hidden;border:1px solid var(--bd);position:relative;background:#000;}
+.preview.show{display:block;}
+.preview img{width:100%;display:block;max-height:420px;object-fit:contain;background:#000;}
+.preview-bar{position:absolute;top:10px;right:10px;display:flex;gap:8px;}
+.pbtn{background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit;backdrop-filter:blur(4px);}
+.aibadge{display:none;margin-top:10px;font-size:12px;color:var(--car);font-weight:500;}
+
+textarea,input[type=text]{width:100%;background:#fff;border:1px solid var(--bd);border-radius:12px;padding:14px;font-family:inherit;font-size:16px;color:var(--esp);resize:vertical;}
+textarea:focus,input:focus{outline:none;border-color:var(--car);box-shadow:0 0 0 3px rgba(193,125,60,.12);}
+
+.fchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.fchip{background:#fff;border:1px solid var(--bd);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;user-select:none;transition:all .15s;}
+.fchip.on{background:var(--car);color:#fff;border-color:var(--car);}
+
+.cta{width:100%;background:var(--esp);color:var(--cream);border:none;border-radius:14px;padding:18px;font-family:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px;}
+.cta:hover{background:#2E261F;transform:translateY(-1px);}
+.cta:active{transform:translateY(0);}
+.cta:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.spin{width:18px;height:18px;border:2px solid rgba(245,240,232,.3);border-top-color:var(--cream);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* RESULT */
+.result{display:none;margin-top:24px;}
+.result.show{display:block;}
+.rcard{background:#fff;border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:16px;}
+.rhead{background:var(--esp);color:var(--cream);padding:12px 16px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+.rbody{padding:16px;font-size:15px;line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+.rcopy{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--cream);padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit;}
+.dl-row{display:flex;gap:10px;flex-wrap:wrap;}
+.dl{flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--esp);color:var(--cream);text-decoration:none;border-radius:12px;padding:14px;font-size:14px;font-weight:500;}
+.dl:hover{background:#2E261F;}
+.dl span{opacity:.55;font-size:11px;}
+.regen{width:100%;background:transparent;border:1px solid var(--bd);color:var(--esp);border-radius:12px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:6px;}
+.regen:hover{background:#fff;}
+
+.ltxt{padding:20px;text-align:center;color:#7A6E66;}
+.ldots::after{content:'';animation:dots 1.4s steps(4,end) infinite;}
+@keyframes dots{0%{content:'';}25%{content:'.';}50%{content:'..';}75%{content:'...';};}
+
+/* MODAL — advanced tools */
+.modal{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:100;backdrop-filter:blur(3px);}
+.modal.show{display:flex;align-items:flex-end;justify-content:center;}
+.sheet{background:var(--cream);width:100%;max-width:600px;border-radius:20px 20px 0 0;max-height:85vh;overflow-y:auto;padding:24px 20px 40px;animation:up .3s ease;}
+@keyframes up{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.sheet-h h2{font-family:'Playfair Display',serif;font-size:20px;}
+.sheet-close{background:none;border:none;font-size:24px;cursor:pointer;color:#9A8E86;}
+.tool-item{display:flex;align-items:center;gap:14px;padding:15px;background:#fff;border:1px solid var(--bd);border-radius:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;}
+.tool-item:hover{border-color:var(--car);transform:translateX(2px);}
+.tool-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.tool-txt h3{font-size:15px;font-weight:600;}
+.tool-txt p{font-size:12px;color:#9A8E86;margin-top:1px;}
+
+/* SUB-PAGE for advanced tool */
+.subpage{display:none;}
+.subpage.show{display:block;}
+.back{background:none;border:none;color:var(--car);font-size:14px;cursor:pointer;font-family:inherit;margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:#7A6E66;margin-bottom:6px;}
+.field select,.field textarea,.field input{width:100%;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:15px;color:var(--esp);}
+.stars{display:flex;gap:4px;margin-bottom:6px;}
+.star{font-size:26px;cursor:pointer;color:#D0C8C0;}.star.on{color:var(--car);}
+
+/* API BAR */
+.apibar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--esp);color:var(--cream);padding:14px 18px;align-items:center;gap:10px;z-index:200;border-top:3px solid var(--car);flex-wrap:wrap;}
+.apibar input{flex:1;min-width:180px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:9px 12px;color:var(--cream);font-size:14px;font-family:inherit;}
+.apibar button{background:var(--car);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--esp);color:var(--cream);padding:12px 22px;border-radius:10px;font-size:14px;z-index:300;border-left:3px solid var(--car);box-shadow:0 6px 24px rgba(0,0,0,.3);pointer-events:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">G</div>
+  <div><h1>GREED Studio</h1><p>Crea un post in 10 secondi</p></div>
+  <button class="tools-btn" onclick="openTools()">⚙ Altri strumenti</button>
+</header>
+
+<div class="wrap">
+
+  <!-- MAIN STUDIO -->
+  <div id="studio">
+    <div class="step">
+      <div class="step-title"><span class="step-num">1</span> Carica la foto del gelato</div>
+      <div class="drop" id="drop">
+        <input type="file" accept="image/*" onchange="onPhoto(event)">
+        <div class="drop-ico">📸</div>
+        <div class="drop-t">Tocca per scegliere o scattare</div>
+        <div class="drop-s">La ottimizzo io per Instagram</div>
+      </div>
+      <div class="preview" id="preview">
+        <div class="preview-bar"><button class="pbtn" onclick="resetPhoto()">✕ Cambia</button></div>
+        <img id="prev-img" src="" alt="">
+      </div>
+      <div class="aibadge" id="aibadge"></div>
+    </div>
+
+    <div class="step">
+      <div class="step-title"><span class="step-num">2</span> Scrivi una frase guida</div>
+      <textarea id="guida" rows="2" placeholder="Es: pistacchio appena arrivato da Bronte, oggi in coppetta"></textarea>
+      <div class="fchips" id="format-chips">
+        <div class="fchip on" data-fmt="post" onclick="toggleFmt(this)">📷 Post quadrato</div>
+        <div class="fchip on" data-fmt="story" onclick="toggleFmt(this)">📱 Storia 9:16</div>
+      </div>
+    </div>
+
+    <button class="cta" id="cta" onclick="createPost()">
+      <span>✨ Crea post</span>
+    </button>
+
+    <!-- RESULT -->
+    <div class="result" id="result">
+      <div class="rcard">
+        <div class="rhead"><span>📝 Testo del post</span><button class="rcopy" onclick="copyText()">Copia</button></div>
+        <div class="rbody" id="post-text"></div>
+      </div>
+      <div class="step-title" style="margin-top:18px"><span class="step-num">⬇</span> Scarica le foto pronte</div>
+      <div class="dl-row" id="dl-row"></div>
+      <button class="regen" onclick="createPost()">🔄 Rigenera il testo</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOOLS MODAL -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <div class="sheet-h">
+      <h2 id="sheet-title">Altri strumenti</h2>
+      <button class="sheet-close" onclick="closeTools()">✕</button>
+    </div>
+
+    <!-- TOOL LIST -->
+    <div id="tool-list">
+      <div class="tool-item" onclick="openSub('seo')"><div class="tool-ico" style="background:#E8EDF5">⭐</div><div class="tool-txt"><h3>Rispondi a una recensione</h3><p>Google, TripAdvisor — risposta pronta</p></div></div>
+      <div class="tool-item" onclick="openSub('crm')"><div class="tool-ico" style="background:#E8F4EE">💌</div><div class="tool-txt"><h3>Messaggio Club Greed</h3><p>WhatsApp per i clienti fedeli</p></div></div>
+      <div class="tool-item" onclick="openSub('commenti')"><div class="tool-ico" style="background:#FFF3E0">💬</div><div class="tool-txt"><h3>Rispondi a un commento</h3><p>Instagram, Facebook</p></div></div>
+      <div class="tool-item" onclick="openSub('menu')"><div class="tool-ico" style="background:#E8F5E9">🍦</div><div class="tool-txt"><h3>Descrizione gusto</h3><p>Per menu, lavagna, sito</p></div></div>
+      <div class="tool-item" onclick="openSub('promo')"><div class="tool-ico" style="background:#FCE4EC">🎯</div><div class="tool-txt"><h3>Crea una promozione</h3><p>Offerta completa pronta</p></div></div>
+      <div class="tool-item" onclick="openSub('ddt')"><div class="tool-ico" style="background:#F3F0E8">📦</div><div class="tool-txt"><h3>Documento di trasporto</h3><p>DDT in PDF</p></div></div>
+      <div class="tool-item" onclick="openSub('brand')"><div class="tool-ico" style="background:#F0EAF8">🧬</div><div class="tool-txt"><h3>Personalità del brand</h3><p>Definisci il tono di GREED</p></div></div>
+    </div>
+
+    <!-- SUB PAGES -->
+    <div class="subpage" id="sub-seo">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Valutazione</label><div class="stars" id="seo-stars"><span class="star on" onclick="setStar(1)">★</span><span class="star on" onclick="setStar(2)">★</span><span class="star on" onclick="setStar(3)">★</span><span class="star on" onclick="setStar(4)">★</span><span class="star on" onclick="setStar(5)">★</span></div></div>
+      <div class="field"><label>Testo recensione</label><textarea id="seo-rec" rows="3" placeholder="Incolla la recensione..."></textarea></div>
+      <div class="field"><label>Nome cliente (se c'è)</label><input type="text" id="seo-nome" placeholder="Es: Marco"></div>
+      <button class="cta" id="btn-seo" onclick="runSeo()"><span>Genera risposta</span></button>
+      <div class="rcard" id="r-seo" style="display:none;margin-top:16px"><div class="rhead"><span>Risposta</span><button class="rcopy" onclick="copySub('r-seo')">Copia</button></div><div class="rbody" id="rb-seo"></div></div>
+    </div>
+
+    <div class="subpage" id="sub-crm">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Obiettivo</label><select id="crm-ob"><option>Promozione gusto nuovo</option><option>Riattivazione clienti</option><option>Ora Furba (10-11)</option><option>Auguri compleanno</option><option>Evento speciale</option></select></div>
+      <div class="field"><label>Dettagli</label><textarea id="crm-det" rows="3" placeholder="Es: nuovo gusto al fico, solo nel weekend"></textarea></div>
+      <button class="cta" id="btn-crm" onclick="runCrm()"><span>Genera messaggio</span></button>
+      <div class="rcard" id="r-crm" style="display:none;margin-top:16px"><div class="rhead"><span>Messaggio</span><button class="rcopy" onclick="copySub('r-crm')">Copia</button></div><div class="rbody" id="rb-crm"></div></div>
+    </div>
+
+    <div class="subpage" id="sub-commenti">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Commento ricevuto</label><textarea id="com-testo" rows="3" placeholder="Es: avete gusti vegani?"></textarea></div>
+      <button class="cta" id="btn-com" onclick="runCom()"><span>Genera risposta</span></button>
+      <div class="rcard" id="r-com" style="display:none;margin-top:16px"><div class="rhead"><span>Risposta</span><button class="rcopy" onclick="copySub('r-com')">Copia</button></div><div class="rbody" id="rb-com"></div></div>
+    </div>
+
+    <div class="subpage" id="sub-menu">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Nome gusto</label><input type="text" id="mn-gusto" placeholder="Es: Pistacchio di Bronte"></div>
+      <div class="field"><label>Ingredienti / provenienza</label><textarea id="mn-ing" rows="2" placeholder="Es: pistacchio DOP di Bronte, senza glutine"></textarea></div>
+      <div class="field"><label>Dove va</label><select id="mn-dest"><option>Sito web</option><option>Lavagna (1 riga)</option><option>Menu stampato</option></select></div>
+      <button class="cta" id="btn-mn" onclick="runMenu()"><span>Genera descrizione</span></button>
+      <div class="rcard" id="r-mn" style="display:none;margin-top:16px"><div class="rhead"><span>Descrizione</span><button class="rcopy" onclick="copySub('r-mn')">Copia</button></div><div class="rbody" id="rb-mn"></div></div>
+    </div>
+
+    <div class="subpage" id="sub-promo">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Tipo</label><select id="pr-tipo"><option>Sconto percentuale</option><option>2x1 / Porta un amico</option><option>Gusto del mese</option><option>Ora Furba</option><option>Gift card</option></select></div>
+      <div class="field"><label>Dettagli</label><textarea id="pr-det" rows="2" placeholder="Es: 20% sui sorbetti questo weekend"></textarea></div>
+      <button class="cta" id="btn-pr" onclick="runPromo()"><span>Crea promozione</span></button>
+      <div class="rcard" id="r-pr" style="display:none;margin-top:16px"><div class="rhead"><span>Promozione</span><button class="rcopy" onclick="copySub('r-pr')">Copia</button></div><div class="rbody" id="rb-pr"></div></div>
+    </div>
+
+    <div class="subpage" id="sub-ddt">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Data</label><input type="text" id="ddt-data"></div>
+      <div class="field"><label>Destinatario</label><textarea id="ddt-dest" rows="2" placeholder="Nome, indirizzo"></textarea></div>
+      <div class="field"><label>Prodotti (uno per riga: nome, quantità)</label><textarea id="ddt-prod" rows="4" placeholder="Gelato Pistacchio, 2 Kg&#10;Sorbetto Limone, 1 Kg"></textarea></div>
+      <div class="field"><label>Temperatura</label><select id="ddt-temp"><option>-10/-14°C (gelato artigianale)</option><option>-18°C (surgelato)</option><option>0/+4°C</option></select></div>
+      <button class="cta" onclick="genDDT()"><span>📄 Genera DDT in PDF</span></button>
+    </div>
+
+    <div class="subpage" id="sub-brand">
+      <button class="back" onclick="backToList()">← Indietro</button>
+      <div class="field"><label>Big Idea (frase che riassume GREED)</label><input type="text" id="br-big" placeholder="Es: Il gelato che racconta i Castelli"></div>
+      <div class="field"><label>Parole da evitare sempre</label><textarea id="br-ban" rows="2" placeholder="delizioso, buonissimo, sapore unico"></textarea></div>
+      <div class="field"><label>Tono</label><textarea id="br-voice" rows="2" placeholder="autentico, locale, caloroso, mai pomposo"></textarea></div>
+      <button class="cta" onclick="saveBrand()"><span>💾 Salva personalità brand</span></button>
+    </div>
+
+  </div>
+</div>
+
+<!-- API BAR -->
+<div class="apibar" id="apibar">
+  <span style="font-size:13px;flex-shrink:0">🔑 Inserisci la tua API key:</span>
+  <input type="password" id="api-inp" placeholder="sk-ant-api03-...">
+  <button onclick="saveKey()">Salva</button>
+</div>
+
+<script>
+// ============ STATE ============
+var S = { photo:null, photoB64:null, analysis:null, formats:['post','story'], stars:5 };
+
+// ============ API ============
+function getKey(){ return localStorage.getItem('greed_key')||''; }
+function saveKey(){ var v=document.getElementById('api-inp').value.trim(); if(!v.indexOf('sk-ant')===0&&!v.startsWith('sk-ant')){alert('Chiave non valida');return;} localStorage.setItem('greed_key',v); document.getElementById('apibar').style.display='none'; toast('API Key salvata ✓'); }
+function checkKey(){ if(!getKey()) document.getElementById('apibar').style.display='flex'; }
+
+function sysPrompt(){
+  var core = JSON.parse(localStorage.getItem('greed_brand')||'{}');
+  var s = "Sei il copywriter di Gelateria GREED a Frascati (Piazza Roma 16). Gelateria artigianale 100% senza glutine, premio Gambero Rosso Miglior Gelato Gastronomico. Ingredienti km-0 dei Castelli Romani. Tono autentico, locale, mai pomposo. Scrivi in italiano impeccabile. Rispondi SOLO con il testo richiesto.";
+  if(core.big) s+=" Big Idea: '"+core.big+"'.";
+  if(core.ban) s+=" NON usare mai queste parole: "+core.ban+".";
+  if(core.voice) s+=" Tono: "+core.voice+".";
+  return s;
+}
+
+function ask(prompt, maxTok){
+  maxTok = maxTok||1000;
+  if(!getKey()){ checkKey(); return Promise.reject(new Error('Inserisci la API key')); }
+  var ctrl=new AbortController(); var tid=setTimeout(function(){ctrl.abort();},35000);
+  return fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST', signal:ctrl.signal,
+    headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:maxTok,system:sysPrompt(),messages:[{role:'user',content:prompt}]})
+  }).then(function(r){ clearTimeout(tid); return r.json().then(function(d){ if(!r.ok) throw new Error(d.error?d.error.message:'Errore'); return d.content[0].text.trim(); }); })
+    .catch(function(e){ clearTimeout(tid); if(e.name==='AbortError') throw new Error('Timeout, riprova'); throw e; });
+}
+
+function askVision(b64, prompt){
+  if(!getKey()){ checkKey(); return Promise.reject(new Error('Inserisci la API key')); }
+  var ctrl=new AbortController(); var tid=setTimeout(function(){ctrl.abort();},40000);
+  return fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST', signal:ctrl.signal,
+    headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:400,system:'Sei il social media manager di Gelateria GREED, Frascati. Rispondi in italiano, conciso.',messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:prompt}]}]})
+  }).then(function(r){ clearTimeout(tid); return r.json().then(function(d){ if(!r.ok) throw new Error(d.error?d.error.message:'Errore'); return d.content[0].text.trim(); }); })
+    .catch(function(e){ clearTimeout(tid); if(e.name==='AbortError') throw new Error('Timeout immagine'); throw e; });
+}
+
+// ============ HELPERS ============
+function toast(msg){ var t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2800); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function compressImg(file, maxMB){
+  maxMB=maxMB||3.5;
+  return new Promise(function(res,rej){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas'); var max=1200; var w=img.width,h=img.height;
+      if(w>max||h>max){var sc=max/Math.max(w,h);w=Math.round(w*sc);h=Math.round(h*sc);}
+      canvas.width=w;canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h);
+      var q=0.85;
+      function go(){ var d=canvas.toDataURL('image/jpeg',q); var b=d.split(',')[1]; if(b.length*0.75<=maxMB*1048576||q<=0.3) res(b); else{q-=0.15;go();} }
+      go();
+    };
+    img.onerror=rej; img.src=URL.createObjectURL(file);
+  });
+}
+
+// ============ STUDIO FLOW ============
+function onPhoto(e){
+  var f=e.target.files[0]; if(!f)return;
+  if(!f.type.startsWith('image/')){alert('Carica una foto');return;}
+  S.photo=f;
+  document.getElementById('prev-img').src=URL.createObjectURL(f);
+  document.getElementById('drop').style.display='none';
+  document.getElementById('preview').classList.add('show');
+  // Auto-analyze
+  var badge=document.getElementById('aibadge'); badge.style.display='block';
+  var secs=0; badge.textContent='✦ Analizzo la foto...';
+  var tick=setInterval(function(){secs++;badge.textContent='✦ Analizzo la foto... '+secs+'s';},1000);
+  compressImg(f,3.5).then(function(b64){
+    S.photoB64=b64;
+    return askVision(b64,'Analizza questa foto di gelato. Rispondi così:\nGUSTO: [nome]\nDESCRIZIONE: [1 riga]');
+  }).then(function(raw){
+    clearInterval(tick);
+    var g=raw.match(/GUSTO:\s*(.+)/); var d=raw.match(/DESCRIZIONE:\s*(.+)/);
+    S.analysis={gusto:g?g[1].trim():'',desc:d?d[1].trim():''};
+    badge.textContent='✦ Riconosciuto: '+(S.analysis.gusto||'gelato')+' ✓';
+    if(S.analysis.gusto && !document.getElementById('guida').value) document.getElementById('guida').value=S.analysis.gusto;
+  }).catch(function(e){ clearInterval(tick); badge.textContent='✦ '+e.message; });
+}
+
+function resetPhoto(){
+  S.photo=null; S.photoB64=null; S.analysis=null;
+  document.getElementById('drop').style.display='block';
+  document.getElementById('preview').classList.remove('show');
+  document.getElementById('aibadge').style.display='none';
+  document.getElementById('result').classList.remove('show');
+}
+
+function toggleFmt(el){
+  el.classList.toggle('on');
+  S.formats=[].slice.call(document.querySelectorAll('.fchip.on')).map(function(c){return c.dataset.fmt;});
+}
+
+function createPost(){
+  var guida=document.getElementById('guida').value.trim();
+  if(!S.photo && !guida){ alert('Carica una foto o scrivi una frase'); return; }
+  var btn=document.getElementById('cta'); btn.disabled=true; btn.innerHTML='<div class="spin"></div><span>Sto creando...</span>';
+  var ctx = S.analysis ? ('Foto: '+S.analysis.gusto+' — '+S.analysis.desc) : '';
+  var prompt = 'Scrivi un post Instagram per Gelateria GREED.\n'+(guida?'Indicazione: '+guida+'\n':'')+(ctx?ctx+'\n':'')+'3-5 righe, tono caldo e autentico, con emoji giuste e 6-8 hashtag pertinenti alla fine. Solo il testo del post.';
+  ask(prompt,800).then(function(txt){
+    document.getElementById('post-text').textContent=txt;
+    if(S.photo) buildDownloads();
+    document.getElementById('result').classList.add('show');
+    document.getElementById('result').scrollIntoView({behavior:'smooth'});
+  }).catch(function(e){ document.getElementById('post-text').textContent='⚠️ '+e.message; document.getElementById('result').classList.add('show'); })
+    .then(function(){ btn.disabled=false; btn.innerHTML='<span>✨ Crea post</span>'; });
+}
+
+function buildDownloads(){
+  var row=document.getElementById('dl-row'); row.innerHTML='';
+  var specs={post:{w:1080,h:1080,label:'Post quadrato'},story:{w:1080,h:1920,label:'Storia 9:16'}};
+  S.formats.forEach(function(fmt){
+    var sp=specs[fmt]; if(!sp)return;
+    var canvas=document.createElement('canvas'); canvas.width=sp.w; canvas.height=sp.h;
+    var ctx=canvas.getContext('2d');
+    var img=new Image();
+    img.onload=function(){
+      var sc=Math.max(sp.w/img.width,sp.h/img.height); var sw=img.width*sc,sh=img.height*sc;
+      ctx.drawImage(img,(sp.w-sw)/2,(sp.h-sh)/2,sw,sh);
+      var url=canvas.toDataURL('image/jpeg',0.92);
+      var a=document.createElement('a'); a.className='dl'; a.href=url; a.download='GREED_'+fmt+'_'+sp.w+'x'+sp.h+'.jpg';
+      a.innerHTML='⬇ '+sp.label+' <span>'+sp.w+'×'+sp.h+'</span>';
+      row.appendChild(a);
+    };
+    img.src=URL.createObjectURL(S.photo);
+  });
+}
+
+function copyText(){ navigator.clipboard.writeText(document.getElementById('post-text').textContent).then(function(){toast('Testo copiato ✓');}); }
+
+// ============ MODAL ============
+function openTools(){ document.getElementById('modal').classList.add('show'); backToList(); }
+function closeTools(){ document.getElementById('modal').classList.remove('show'); }
+function openSub(id){
+  document.getElementById('tool-list').style.display='none';
+  [].slice.call(document.querySelectorAll('.subpage')).forEach(function(s){s.classList.remove('show');});
+  document.getElementById('sub-'+id).classList.add('show');
+  document.getElementById('sheet-title').textContent='';
+  if(id==='ddt'){ document.getElementById('ddt-data').value=new Date().toLocaleDateString('it-IT'); }
+}
+function backToList(){
+  document.getElementById('tool-list').style.display='block';
+  [].slice.call(document.querySelectorAll('.subpage')).forEach(function(s){s.classList.remove('show');});
+  document.getElementById('sheet-title').textContent='Altri strumenti';
+}
+function copySub(cardId){ navigator.clipboard.writeText(document.getElementById('rb-'+cardId.split('-')[1]).textContent).then(function(){toast('Copiato ✓');}); }
+function setStar(n){ S.stars=n; [].slice.call(document.querySelectorAll('#seo-stars .star')).forEach(function(s,i){s.classList.toggle('on',i<n);}); }
+
+function runTool(btnId, cardId, bodyId, prompt, maxTok){
+  var btn=document.getElementById(btnId); var lbl=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='<div class="spin"></div><span>Genero...</span>';
+  ask(prompt,maxTok||800).then(function(txt){
+    document.getElementById(bodyId).textContent=txt;
+    document.getElementById(cardId).style.display='block';
+  }).catch(function(e){ document.getElementById(bodyId).textContent='⚠️ '+e.message; document.getElementById(cardId).style.display='block'; })
+    .then(function(){ btn.disabled=false; btn.innerHTML=lbl; });
+}
+
+function runSeo(){
+  var rec=document.getElementById('seo-rec').value.trim(); if(!rec){alert('Inserisci la recensione');return;}
+  var nome=document.getElementById('seo-nome').value.trim();
+  var neg=S.stars<=2;
+  var p='Rispondi a questa recensione da '+S.stars+' stelle per Gelateria GREED.\n'+(nome?'Cliente: '+nome+'\n':'')+'Recensione: "'+rec+'"\nMax 150 parole. '+(neg?'Empatico, professionale, offri soluzione.':'Ringrazia, valorizza il dettaglio citato.')+' Firma "Dario — Gelateria GREED". Invita a tornare.';
+  runTool('btn-seo','r-seo','rb-seo',p,600);
+}
+function runCrm(){
+  var p='Scrivi un messaggio WhatsApp per il Club Greed di Gelateria GREED.\nObiettivo: '+document.getElementById('crm-ob').value+'\nDettagli: '+document.getElementById('crm-det').value+'\nMax 600 caratteri, caloroso, con {{nome}}, CTA finale, firma "Team GREED 🍦".';
+  runTool('btn-crm','r-crm','rb-crm',p,600);
+}
+function runCom(){
+  var t=document.getElementById('com-testo').value.trim(); if(!t){alert('Inserisci il commento');return;}
+  runTool('btn-com','r-com','rb-com','Rispondi a questo commento social per Gelateria GREED, max 2 righe, amichevole:\n"'+t+'"',400);
+}
+function runMenu(){
+  var g=document.getElementById('mn-gusto').value.trim(); if(!g){alert('Inserisci il gusto');return;}
+  var p='Descrizione del gusto "'+g+'" per '+document.getElementById('mn-dest').value+' di Gelateria GREED.\nIngredienti: '+document.getElementById('mn-ing').value+'\nTono poetico ma concreto, dettagli sensoriali, mai "delizioso" o "buonissimo".';
+  runTool('btn-mn','r-mn','rb-mn',p,500);
+}
+function runPromo(){
+  var p='Crea una promozione per Gelateria GREED.\nTipo: '+document.getElementById('pr-tipo').value+'\nDettagli: '+document.getElementById('pr-det').value+'\nDammi: 1) NOME promozione 2) post Instagram 3) messaggio WhatsApp con {{nome}}.';
+  runTool('btn-pr','r-pr','rb-pr',p,1000);
+}
+
+function saveBrand(){
+  localStorage.setItem('greed_brand',JSON.stringify({big:document.getElementById('br-big').value.trim(),ban:document.getElementById('br-ban').value.trim(),voice:document.getElementById('br-voice').value.trim()}));
+  toast('Personalità brand salvata ✓');
+}
+
+function genDDT(){
+  var dest=document.getElementById('ddt-dest').value.trim(); if(!dest){alert('Inserisci il destinatario');return;}
+  var prod=document.getElementById('ddt-prod').value.trim().split('\n').filter(Boolean);
+  if(!prod.length){alert('Inserisci almeno un prodotto');return;}
+  var n=parseInt(localStorage.getItem('greed_ddtn')||'0')+1; localStorage.setItem('greed_ddtn',n);
+  var now=new Date(); var num='GREED/'+now.getFullYear()+'/'+String(n).padStart(4,'0');
+  var rows=prod.map(function(line,i){ var parts=line.split(','); return '<tr style="background:'+(i%2?'#FAFAF7':'#fff')+'"><td style="padding:8px 12px;border-bottom:1px solid #E8E4DC">'+(parts[0]||'').trim()+'</td><td style="padding:8px 12px;border-bottom:1px solid #E8E4DC;text-align:center">'+(parts[1]||'').trim()+'</td></tr>'; }).join('');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>DDT '+num+'</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#1C1410}h1{font-family:Georgia,serif;font-size:26px;letter-spacing:2px;margin:0}.hdr{display:flex;justify-content:space-between;border-bottom:3px solid #C17D3C;padding-bottom:18px;margin-bottom:22px}.box{background:#F9F5F0;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.7}table{width:100%;border-collapse:collapse;margin:16px 0}th{background:#1C1410;color:#F5F0E8;padding:9px 12px;text-align:left;font-size:11px}.sig{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:40px}.sb{border-top:1px solid #C17D3C;padding-top:8px;font-size:11px;color:#999;text-align:center}.ft{margin-top:26px;border-top:1px solid #E8E4DC;padding-top:12px;font-size:10px;color:#999;text-align:center}@media print{.np{display:none}}</style></head><body><div class="hdr"><div><h1>GREED.</h1><div style="font-size:11px;color:#999">Gelateria Naturale · Frascati</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:700">Documento di Trasporto</div><div style="font-size:13px;margin-top:4px">'+num+'</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:18px"><div class="box"><strong>MITTENTE</strong><br>Gelateria GREED<br>Piazza Roma 16 — 00044 Frascati (RM)</div><div class="box"><strong>DESTINATARIO</strong><br>'+dest.replace(/\n/g,'<br>')+'</div></div><div class="box"><strong>Data:</strong> '+document.getElementById('ddt-data').value+' &nbsp;|&nbsp; <strong>Temperatura:</strong> '+document.getElementById('ddt-temp').value+'</div><table><thead><tr><th style="width:75%">Prodotto</th><th style="width:25%;text-align:center">Quantità</th></tr></thead><tbody>'+rows+'</tbody></table><div class="sig"><div class="sb">Firma Mittente<br><br></div><div class="sb">Firma Vettore<br><br></div><div class="sb">Firma Destinatario<br><br></div></div><div class="ft">Gelateria GREED · Piazza Roma 16, Frascati (RM) · 100% Senza Glutine · Premio Gambero Rosso</div><div class="np" style="margin-top:24px;text-align:center"><button onclick="window.print()" style="background:#1C1410;color:#fff;border:none;border-radius:8px;padding:12px 26px;font-size:14px;cursor:pointer">🖨 Stampa / Salva PDF</button></div><script>window.onload=function(){window.print();}<\/script></body></html>';
+  var w=window.open('','_blank'); w.document.write(html); w.document.close();
+  toast('DDT '+num+' generato ✓');
+}
+
+// ============ INIT ============
+checkKey();
+</script>
+</body>
+</html>
